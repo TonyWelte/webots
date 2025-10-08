@@ -44,6 +44,8 @@
 #include <QtCore/QtGlobal>
 
 #include <cassert>
+#include <chrono>
+#include <cmath>
 
 WbSimulationWorld *WbSimulationWorld::instance() {
   return static_cast<WbSimulationWorld *>(WbWorld::instance());
@@ -213,7 +215,7 @@ void WbSimulationWorld::step() {
     } else if (mean < timeStep)
       mSleepRealTime += 0.03 * timeStep;
 
-    mTimer->start(mSleepRealTime);
+    // mTimer->start(mSleepRealTime);
   }
 
   emit physicsStepStarted();
@@ -320,7 +322,8 @@ void WbSimulationWorld::modeChanged() {
       mRealTimeTimer.start();
       WbSoundEngine::setPause(false);
       WbSoundEngine::setMute(WbPreferences::instance()->value("Sound/mute").toBool());
-      mTimer->start(mSleepRealTime);
+      mTimer->setTimerType(Qt::PreciseTimer);
+      mTimer->start(basicTimeStep());
       break;
     case WbSimulationState::FAST:
       WbSoundEngine::setPause(false);
