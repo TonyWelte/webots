@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ class WbMotor : public WbJointDevice {
   Q_OBJECT
 
 public:
-  virtual ~WbMotor();
+  virtual ~WbMotor() override;
 
   // Accessors
   bool userControl() const { return mUserControl; }
@@ -99,6 +99,9 @@ protected:
   double mMotorForceOrTorque;
   void enableMotorFeedback(int rate);
   virtual double computeFeedback() const = 0;
+
+  void exportNodeFields(WbWriter &writer) const override;
+  QStringList customExportedFields() const override;
 
 protected slots:
   void updateMaxForceOrTorque();

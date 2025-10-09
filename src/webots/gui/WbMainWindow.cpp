@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1180,7 +1180,7 @@ void WbMainWindow::savePerspective(bool reloading, bool saveToFile, bool isSaveE
 
 void WbMainWindow::restorePerspective(bool reloading, bool firstLoad, bool loadingFromMemory) {
   WbWorld *world = WbWorld::instance();
-  WbPerspective *perspective = world->perspective();
+  const WbPerspective *perspective = world->perspective();
   bool meansOfLoading = false;
   if (loadingFromMemory)
     meansOfLoading = true;
@@ -1622,7 +1622,7 @@ void WbMainWindow::upload() {
 
   // add files content
   QMap<QString, QString> map;
-  foreach (const QString fileName, fileNames) {
+  foreach (const QString &fileName, fileNames) {
     QHttpPart mainPart;
     if (fileName.contains("w3d")) {
       map["foldername"] = WbStandardPaths::webotsTmpPath();
@@ -1731,7 +1731,7 @@ void WbMainWindow::uploadFinished() {
     QJsonDocument doc(obj);
     QByteArray data = doc.toJson();
 
-    QNetworkReply *uploadReply = manager->post(request, data);
+    const QNetworkReply *uploadReply = manager->post(request, data);
 
     QObject::connect(uploadReply, &QNetworkReply::finished, this, &WbMainWindow::uploadStatus);
 
@@ -2181,7 +2181,7 @@ void WbMainWindow::showHtmlRobotWindow(WbRobot *robot, bool manualTrigger) {
       currentRobotWindow = new WbRobotWindow(robot);
       mRobotWindows << currentRobotWindow;
       connect(mTcpServer, &WbTcpServer::sendRobotWindowClientID, currentRobotWindow, &WbRobotWindow::setClientID);
-      connect(robot, &WbBaseNode::isBeingDestroyed, this, [this, robot]() { deleteRobotWindow(robot); });
+      connect(robot, &WbNode::isBeingDestroyed, this, [this, robot]() { deleteRobotWindow(robot); });
       connect(robot, &WbMatter::matterNameChanged, this, [this, robot]() { showHtmlRobotWindow(robot, false); });
       connect(robot, &WbRobot::controllerChanged, this, [this, robot]() { showHtmlRobotWindow(robot, false); });
       connect(robot, &WbRobot::externControllerChanged, this, [this, robot]() { showHtmlRobotWindow(robot, false); });
@@ -2617,7 +2617,7 @@ void WbMainWindow::disableAnimationAction() {
 }
 
 void WbMainWindow::logActiveControllersTermination() {
-  WbControlledWorld *controlledWorld = WbControlledWorld::instance();
+  const WbControlledWorld *controlledWorld = WbControlledWorld::instance();
   if (controlledWorld) {
     QStringList activeControllers = controlledWorld->activeControllersNames();
     foreach (QString controllerName, activeControllers)

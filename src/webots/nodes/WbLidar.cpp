@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -242,7 +242,7 @@ void WbLidar::exportNodeSubNodes(WbWriter &writer) const {
   if (writer.isWebots() || writer.isUrdf())
     return;
 
-  WbSolid *s = solidEndPoint();
+  const WbSolid *s = solidEndPoint();
   if (s)
     s->write(writer);
 }
@@ -427,7 +427,8 @@ void WbLidar::updatePointCloud(int minWidth, int maxWidth) {
   const double dtheta = mIsActuallyRotating ? (-2 * M_PI / (double)resolution) : (-actualFieldOfView() / w);
   const double cosdTheta = cos(dtheta);
   const double sindTheta = sin(dtheta);
-  const double theta0 = mIsActuallyRotating ? (minWidth * dtheta) : (actualFieldOfView() / 2 + minWidth * dtheta + dtheta / 2);
+  const double theta0 =
+    mIsActuallyRotating ? minWidth * dtheta - M_PI : actualFieldOfView() / 2 + minWidth * dtheta + dtheta / 2;
   const double cosTheta0 = cos(theta0);
   const double sinTheta0 = sin(theta0);
 
@@ -1004,7 +1005,7 @@ void WbLidar::attachResizeManipulator() {
 
 void WbLidar::detachResizeManipulator() const {
   WbAbstractCamera::detachResizeManipulator();
-  WbSolid *s = solidEndPoint();
+  const WbSolid *s = solidEndPoint();
   if (s)
     s->detachResizeManipulator();
 }

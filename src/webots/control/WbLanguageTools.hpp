@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,10 +35,7 @@ public:
 private:
   WbLanguageTools() {}
   ~WbLanguageTools() {}
-#if defined __APPLE__ || defined __linux__
-  // cppcheck-suppress unusedPrivateFunction
   static const QString checkIfPythonCommandExist(const QString &pythonCommand, QProcessEnvironment &env, bool log);
-#endif
 #ifdef __APPLE__
   static QString findWorkingPythonPath(const QString &pythonVersion, QProcessEnvironment &env, bool log);
 #endif

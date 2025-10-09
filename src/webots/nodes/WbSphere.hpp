@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ public:
   explicit WbSphere(WbTokenizer *tokenizer = NULL);
   WbSphere(const WbSphere &other);
   explicit WbSphere(const WbNode &other);
-  virtual ~WbSphere();
+  virtual ~WbSphere() override;
 
   // field accessors
   double radius() const { return mRadius->value(); }

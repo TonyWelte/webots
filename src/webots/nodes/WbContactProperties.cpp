@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -119,6 +119,20 @@ void WbContactProperties::postFinalize() {
   connect(mSlideSound, &WbSFString::changed, this, &WbContactProperties::updateSlideSound);
   connect(this, &WbContactProperties::needToEnableBodies, this, &WbContactProperties::enableBodies);
   connect(mMaxContactJoints, &WbSFInt::changed, this, &WbContactProperties::updateMaxContactJoints);
+}
+
+void WbContactProperties::exportNodeFields(WbWriter &writer) const {
+  WbBaseNode::exportNodeFields(writer);
+
+  exportSFResourceField(gUrlNames[0], mBumpSound, writer.relativeSoundsPath(), writer);
+  exportSFResourceField(gUrlNames[1], mRollSound, writer.relativeSoundsPath(), writer);
+  exportSFResourceField(gUrlNames[2], mSlideSound, writer.relativeSoundsPath(), writer);
+}
+
+QStringList WbContactProperties::customExportedFields() const {
+  QStringList fields;
+  fields << "url";
+  return fields;
 }
 
 void WbContactProperties::updateCoulombFriction() {

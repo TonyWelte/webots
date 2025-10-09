@@ -1,5 +1,5 @@
 /*
- * Copyright 1996-2023 Cyberbotics Ltd.
+ * Copyright 1996-2024 Cyberbotics Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "boolean.h"
+#include <stdbool.h>
 #include "helper.h"
 #include "parameters.h"
 #include "texture_generator.h"

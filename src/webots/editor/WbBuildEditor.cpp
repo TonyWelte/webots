@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
 #include "../../../include/controller/c/webots/utils/ansi_codes.h"
 
 #include <QtGui/QAction>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolButton>
 
@@ -268,12 +269,16 @@ void WbBuildEditor::reloadMessageBoxIfNeeded() {
       if (WbMessageBox::enabled()) {
         QMessageBox messageBox(QMessageBox::Question, tr("Compilation successful"),
                                tr("Do you want to reset or reload the world?"), QMessageBox::Cancel, this);
-        messageBox.addButton(tr("Reload"), QMessageBox::AcceptRole);
-        messageBox.setDefaultButton(messageBox.addButton(tr("Reset"), QMessageBox::AcceptRole));
-        const int ret = messageBox.exec();
-        if (ret == 0)
+        const QPushButton *reloadButton = messageBox.addButton(tr("Reload"), QMessageBox::AcceptRole);
+        QPushButton *resetButton = messageBox.addButton(tr("Reset"), QMessageBox::AcceptRole);
+        messageBox.setDefaultButton(resetButton);
+
+        messageBox.exec();
+
+        const QAbstractButton *clickedButton = messageBox.clickedButton();
+        if (clickedButton == reloadButton)
           emit reloadRequested();
-        else if (ret == 1)
+        else if (clickedButton == resetButton)
           emit resetRequested();
       }
     } else
@@ -508,11 +513,8 @@ void WbBuildEditor::jumpToError(QString fileName, int line, int column) {
   if (currentBuffer() && QDir::isRelativePath(fileName))
     fileName = compileDir().absoluteFilePath(fileName);
 
-  if (openFile(fileName)) {
-    WbTextBuffer *buffer = currentBuffer();
-    if (line != -1)
-      buffer->markError(line, column);
-  }
+  if (openFile(fileName) && line != -1)
+    currentBuffer()->markError(line, column);
 }
 
 void WbBuildEditor::unmarkError() {

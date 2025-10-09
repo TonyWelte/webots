@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -106,9 +106,8 @@ QStringList WbTrackWheel::fieldsToSynchronizeWithW3d() const {
 }
 
 void WbTrackWheel::exportNodeFields(WbWriter &writer) const {
-  if (!writer.isW3d())
-    return;
-
   WbBaseNode::exportNodeFields(writer);
-  writer << " rotation=\'" << mRotation->value() << "\'";
+
+  if (writer.isW3d())
+    writer << " rotation=\'" << mRotation->value() << "\'";
 }

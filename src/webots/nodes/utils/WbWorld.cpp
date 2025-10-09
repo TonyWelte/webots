@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -57,6 +57,7 @@
 #include "WbWorldInfo.hpp"
 #include "WbWrenOpenGlContext.hpp"
 #include "WbWrenRenderingContext.hpp"
+#include "WbWrenVertexArrayFrameListener.hpp"
 #include "WbWriter.hpp"
 
 #include <wren/scene.h>
@@ -92,6 +93,7 @@ WbWorld::WbWorld(WbTokenizer *tokenizer) :
   mIsLoading(true),
   mIsCleaning(false),
   mIsVideoRecording(false) {
+  WbWrenVertexArrayFrameListener::resetLastUpdateTime();
   gInstance = this;
   WbNode::setInstantiateMode(true);
   WbNode::setGlobalParentNode(NULL);
@@ -124,7 +126,7 @@ WbWorld::WbWorld(WbTokenizer *tokenizer) :
       return;
     }
     WbTemplateManager::instance()->blockRegeneration(true);
-    WbField *childrenField = mRoot->findField("children");
+    const WbField *childrenField = mRoot->findField("children");
     int index = 0;
     WbApplication::instance()->setWorldLoadingStatus(tr("Creating nodes"));
     foreach (WbNode *node, nodes) {
@@ -135,8 +137,8 @@ WbWorld::WbWorld(WbTokenizer *tokenizer) :
         return;
       }
       QString errorMessage;
-      if (WbNodeUtilities::isAllowedToInsert(childrenField, node->nodeModelName(), mRoot, errorMessage, WbNode::STRUCTURE_USE,
-                                             WbNodeUtilities::slotType(node), QStringList(node->nodeModelName()))) {
+      if (WbNodeUtilities::isAllowedToInsert(childrenField, mRoot, errorMessage, WbNode::STRUCTURE_USE,
+                                             WbNodeUtilities::slotType(node), node)) {
         node->validate();
         mRoot->addChild(node);
       } else
@@ -460,6 +462,7 @@ QList<WbSolid *> WbWorld::findSolids(bool visibleNodes) const {
   QList<WbSolid *> allSolids;
 
   foreach (WbNode *const node, allNodes) {
+    // cppcheck-suppress constVariablePointer
     WbSolid *const solid = dynamic_cast<WbSolid *>(node);
     if (solid)
       allSolids.append(solid);
@@ -561,7 +564,7 @@ void WbWorld::retrieveNodeNamesWithOptionalRendering(QStringList &centerOfMassNo
   centerOfBuoyancyNodeNames.clear();
   supportPolygonNodeNames.clear();
 
-  WbSolid *solid = NULL;
+  const WbSolid *solid = NULL;
   const QList<WbNode *> &allNodes = mRoot->subNodes(true);
   for (int i = 0; i < allNodes.size(); ++i) {
     solid = dynamic_cast<WbSolid *>(allNodes[i]);
@@ -583,17 +586,17 @@ QString WbWorld::logWorldMetrics() const {
   int jointCount = 0;
   int geomCount = 0;
   const QList<WbNode *> &allNodes = mRoot->subNodes(true);
-  foreach (WbNode *node, allNodes) {
-    if (dynamic_cast<WbBasicJoint *>(node)) {
+  foreach (const WbNode *node, allNodes) {
+    if (dynamic_cast<const WbBasicJoint *>(node)) {
       jointCount++;
       continue;
     }
-    WbSolid *solid = dynamic_cast<WbSolid *>(node);
+    const WbSolid *solid = dynamic_cast<const WbSolid *>(node);
     if (solid && (solid->isKinematic() || solid->isSolidMerger())) {
       solidCount++;
       continue;
     }
-    WbGeometry *geometry = dynamic_cast<WbGeometry *>(node);
+    const WbGeometry *geometry = dynamic_cast<const WbGeometry *>(node);
     if (geometry && !geometry->isInBoundingObject())
       geomCount++;
   }

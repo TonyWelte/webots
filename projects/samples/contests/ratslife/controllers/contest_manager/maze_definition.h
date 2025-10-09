@@ -1,5 +1,5 @@
 /*
- * Copyright 1996-2023 Cyberbotics Ltd.
+ * Copyright 1996-2024 Cyberbotics Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 #ifndef MAZE_DEFINITION_H
 #define MAZE_DEFINITION_H
 
-#include "boolean.h"
+#include <stdbool.h>
 #include "linked_list.h"
 // enum
 typedef enum { North, South, East, West, None } Orientation;

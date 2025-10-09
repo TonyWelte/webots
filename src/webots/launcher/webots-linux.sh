@@ -69,7 +69,11 @@ export TMPDIR=$WEBOTS_TMPDIR
 export WEBOTS_TMPDIR=$WEBOTS_TMPDIR
 
 # add the "lib" directory into LD_LIBRARY_PATH as the first entry
+export WEBOTS_ORIGINAL_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="$webots_home/lib/webots":$LD_LIBRARY_PATH
+
+# set the QT platform to use the X11 server for compatibility with Wayland
+export QT_QPA_PLATFORM="xcb"
 
 # Fix for i3 window manager not working with Qt6
 if [ "$XDG_CURRENT_DESKTOP" == "i3" ]; then

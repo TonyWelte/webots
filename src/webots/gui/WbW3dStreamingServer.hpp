@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ class WbW3dStreamingServer : public WbTcpServer {
 
 public:
   WbW3dStreamingServer();
-  ~WbW3dStreamingServer();
+  ~WbW3dStreamingServer() override;
 
 private slots:
   void propagateNodeAddition(WbNode *node) override;

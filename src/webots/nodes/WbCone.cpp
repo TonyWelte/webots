@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -353,9 +353,9 @@ double WbCone::computeLocalCollisionPoint(WbVector3 &point, const WbRay &ray) co
       const double t2 = (-b + discriminant) / (2 * a);
       const double z1 = origin.z() + t1 * direction.z();
       const double z2 = origin.z() + t2 * direction.z();
-      if (mSide->value() && t1 > 0.0 && z1 >= -halfH && z1 <= halfH)
+      if (t1 > 0.0 && z1 >= -halfH && z1 <= halfH)
         d = t1;
-      else if (mSide->value() && t2 > 0.0 && z2 >= -halfH && z2 <= halfH)
+      else if (t2 > 0.0 && z2 >= -halfH && z2 <= halfH)
         d = t2;
     }
   }

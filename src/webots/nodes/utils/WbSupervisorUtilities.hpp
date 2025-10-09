@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -73,6 +73,7 @@ private slots:
   void removeTrackedContactPoints(QObject *obj);
   void removeTrackedPoseNode(QObject *obj);
   void removeTrackedField(QObject *obj);
+  void simulationReset(bool restartControllers);
 
 private:
   WbRobot *mRobot;
@@ -84,11 +85,17 @@ private:
   int mFoundNodeParentUniqueId;
   bool mFoundNodeIsProto;
   bool mFoundNodeIsProtoInternal;
+  int mFoundProtoId;
+  QString mFoundProtoTypeName;
+  bool mFoundProtoIsDerived;
+  int mFoundProtoParameterCount;
   int mFoundFieldIndex;
   int mFoundFieldType;
   int mFoundFieldCount;
   QString mFoundFieldName;
   bool mFoundFieldIsInternal;
+  int mFoundFieldActualFieldNodeId;
+  int mFoundFieldActualFieldIndex;
   int mNodeFieldCount;
   int mGetNodeRequest;
   QList<int> mUpdatedNodeIds;
@@ -105,6 +112,7 @@ private:
   bool mNodeExportStringRequest;
   bool mIsProtoRegenerated;
   bool mShouldRemoveNode;
+  bool mSimulationReset;
 
   // pointer to a single integer: if not NULL, the new status has to be sent to the libController
   int *mAnimationStartStatus;

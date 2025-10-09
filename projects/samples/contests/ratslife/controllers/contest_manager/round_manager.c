@@ -1,5 +1,5 @@
 /*
- * Copyright 1996-2023 Cyberbotics Ltd.
+ * Copyright 1996-2024 Cyberbotics Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 #include "round_manager.h"
 
-#include "boolean.h"
+#include <stdbool.h>
 #include "helper.h"
 
 #include <math.h>
@@ -128,7 +128,7 @@ static void move_viewpoint() {
 
 static void init_mode() {
   mode = COMMON;
-  char *ratslife_env_var = getenv("WEBOTS_RATSLIFE");
+  const char *ratslife_env_var = getenv("WEBOTS_RATSLIFE");
   if (ratslife_env_var) {
     if (0 == strcmp(ratslife_env_var, "CONTEST")) {
       mode = CONTEST;

@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -272,7 +272,15 @@ WrTexture2d *WbWrenTextureOverlay::createIconTexture(QString filePath) {
     return imageTexture;
 
   QImageReader imageReader(filePath);
-  QImage image = imageReader.read().mirrored(false, true);  // account for inverted Y axis in OpenGL
+  QImage image = imageReader.read();
+
+  // account for inverted Y axis in OpenGL
+#ifdef _WIN32  // Windows builds against a newer version of Qt, which deprecates `mirrored`
+  image = image.flipped(Qt::Vertical);
+#else
+  image = image.mirrored(false, true);
+#endif
+
   const bool isTranslucent = image.pixelFormat().alphaUsage() == QPixelFormat::UsesAlpha;
 
   imageTexture = wr_texture_2d_new();
@@ -294,7 +302,7 @@ void WbWrenTextureOverlay::copyDataToTexture(void *data, TextureType type, int x
 
   if (type == TEXTURE_TYPE_DEPTH) {
     int *processedData = new int[width * height];
-    float *originalData = static_cast<float *>(data);
+    const float *originalData = static_cast<float *>(data);
     const float multiplier = 255.0f / mMaxRange;
     for (int i = 0; i < width * height; ++i) {
       unsigned char v = (unsigned char)(multiplier * originalData[i]);

@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public:
   explicit WbCadShape(WbTokenizer *tokenizer = NULL);
   WbCadShape(const WbCadShape &other);
   explicit WbCadShape(const WbNode &other);
-  virtual ~WbCadShape();
+  virtual ~WbCadShape() override;
 
   // reimplemented public functions
   int nodeType() const override { return WB_NODE_CAD_SHAPE; }
@@ -56,6 +56,7 @@ public:
 
 protected:
   void exportNodeFields(WbWriter &writer) const override;
+  QStringList customExportedFields() const override;
   WbBoundingSphere *boundingSphere() const override { return mBoundingSphere; }
   void recomputeBoundingSphere() const;
 

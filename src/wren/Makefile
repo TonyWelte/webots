@@ -1,4 +1,4 @@
-# Copyright 1996-2023 Cyberbotics Ltd.
+# Copyright 1996-2024 Cyberbotics Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +30,9 @@ ifeq ($(OSTYPE),darwin)
 INCLUDE += -I$(WEBOTS_DEPENDENCY_PATH)/freetype2 -I$(WEBOTS_DEPENDENCY_PATH)/assimp/include
 else ifeq ($(OSTYPE),linux)
 INCLUDE += -I/usr/include/freetype2 -I$(WEBOTS_HOME_PATH)/include/libassimp/include
+ifeq ($(OSDIST), fedora)
+INCLUDE += -idirafter/usr/include
+endif
 else ifeq ($(OSTYPE),windows)
 INCLUDE += -I/mingw64/include/freetype2 -I/mingw64/include -I$(WEBOTS_DEPENDENCY_PATH)
 endif

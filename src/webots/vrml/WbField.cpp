@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -104,6 +104,12 @@ bool WbField::isDeprecated() const {
   return mModel->isDeprecated();
 }
 
+// Because of unconnected fields, the only way to definitively check if a field is a parameter is to check its parent node
+// If that is not possible, fallback to the old behavior (See #6604 and #6735)
+bool WbField::isParameter() const {
+  return parentNode() ? parentNode()->isProtoInstance() : !mInternalFields.isEmpty();
+}
+
 void WbField::readValue(WbTokenizer *tokenizer, const QString &worldPath) {
   if (mWasRead)
     tokenizer->reportError(tr("Duplicate field value: '%1'").arg(name()));
@@ -166,8 +172,9 @@ void WbField::checkValueIsAccepted() {
   int refusedIndex;
   if (!mModel->isValueAccepted(mValue, &refusedIndex)) {
     QString acceptedValuesList = "";
-    foreach (const WbVariant acceptedValue, mModel->acceptedValues())
-      acceptedValuesList += acceptedValue.toSimplifiedStringRepresentation() + ", ";
+    foreach (const WbFieldValueRestriction acceptedValue, mModel->acceptedValues())
+      acceptedValuesList +=
+        acceptedValue.toSimplifiedStringRepresentation() + (acceptedValue.allowsSubtypes() ? "+" : "") + ", ";
     acceptedValuesList.chop(2);
     QString error;
     if (isSingle()) {
@@ -319,7 +326,7 @@ void WbField::redirectTo(WbField *parameter, bool skipCopy) {
 
   if (mParameter) {
     // remove previous connections
-    WbMFNode *mfnode = dynamic_cast<WbMFNode *>(mParameter->value());
+    const WbMFNode *mfnode = dynamic_cast<WbMFNode *>(mParameter->value());
     if (mfnode) {
       disconnect(mfnode, &WbMFNode::itemInserted, mParameter, &WbField::parameterNodeInserted);
       disconnect(mfnode, &WbMFNode::itemRemoved, mParameter, &WbField::parameterNodeRemoved);

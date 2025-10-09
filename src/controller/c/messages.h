@@ -1,5 +1,5 @@
 /*
- * Copyright 1996-2023 Cyberbotics Ltd.
+ * Copyright 1996-2024 Cyberbotics Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,6 @@
 #define C_SUPERVISOR_RELOAD_WORLD 52
 #define C_SUPERVISOR_SET_LABEL 53
 #define C_SUPERVISOR_SIMULATION_QUIT 54
-#define C_SUPERVISOR_SIMULATION_RESET 55
 #define C_SUPERVISOR_SIMULATION_CHANGE_MODE 56
 #define C_SUPERVISOR_SIMULATION_RESET_PHYSICS 57
 #define C_SUPERVISOR_START_MOVIE 58
@@ -98,8 +97,10 @@
 #define C_SUPERVISOR_NODE_RESET_STATE 75
 #define C_SUPERVISOR_NODE_SET_JOINT_POSITION 76
 #define C_SUPERVISOR_NODE_EXPORT_STRING 77
+#define C_SUPERVISOR_NODE_GET_PROTO 78
 
 // ctr <-> sim
+#define C_SUPERVISOR_SIMULATION_RESET 55
 #define C_ROBOT_WAIT_FOR_USER_INPUT_EVENT 80
 #define C_ROBOT_WWI_MESSAGE 81
 #define C_SUPERVISOR_SAVE_WORLD 82

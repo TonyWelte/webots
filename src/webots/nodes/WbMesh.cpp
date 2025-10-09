@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -219,7 +219,7 @@ void WbMesh::updateTriangleMesh(bool issueWarnings) {
 
     // compute absolute transform of this node from all the parents
     aiMatrix4x4 transform;
-    aiNode *current = node;
+    const aiNode *current = node;
     while (current != NULL) {
       transform *= current->mTransformation;
       current = current->mParent;
@@ -286,7 +286,7 @@ void WbMesh::updateTriangleMesh(bool issueWarnings) {
   mTriangleMeshError = mTriangleMesh->init(coordData, normalData, texCoordData, indexData, totalVertices, currentIndexIndex);
 
   if (issueWarnings) {
-    foreach (QString warning, mTriangleMesh->warnings())
+    foreach (const QString &warning, mTriangleMesh->warnings())
       warn(warning);
 
     if (!mTriangleMeshError.isEmpty())
@@ -401,31 +401,15 @@ void WbMesh::updateMaterialIndex() {
 }
 
 void WbMesh::exportNodeFields(WbWriter &writer) const {
-  if (!(writer.isW3d() || writer.isProto()))
-    return;
-
-  if (mUrl->size() == 0)
-    return;
-
-  WbField urlFieldCopy(*findField("url", true));
-  for (int i = 0; i < mUrl->size(); ++i) {
-    const QString &completeUrl = WbUrl::computePath(this, "url", mUrl, i);
-    WbMFString *urlFieldValue = dynamic_cast<WbMFString *>(urlFieldCopy.value());
-    if (WbUrl::isLocalUrl(completeUrl))
-      urlFieldValue->setItem(i, WbUrl::computeLocalAssetUrl(completeUrl, writer.isW3d()));
-    else if (WbUrl::isWeb(completeUrl))
-      urlFieldValue->setItem(i, completeUrl);
-    else {
-      if (writer.isWritingToFile())
-        urlFieldValue->setItem(i, WbUrl::exportMesh(this, mUrl, i, writer));
-      else
-        urlFieldValue->setItem(i, WbUrl::expressRelativeToWorld(completeUrl));
-    }
-  }
-
-  urlFieldCopy.write(writer);
-
   WbGeometry::exportNodeFields(writer);
+
+  exportMFResourceField("url", mUrl, writer.relativeMeshesPath(), writer);
+}
+
+QStringList WbMesh::customExportedFields() const {
+  QStringList fields;
+  fields << "url";
+  return fields;
 }
 
 QStringList WbMesh::fieldsToSynchronizeWithW3d() const {

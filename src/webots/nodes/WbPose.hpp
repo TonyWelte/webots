@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public:
   explicit WbPose(WbTokenizer *tokenizer = NULL);
   WbPose(const WbPose &other);
   explicit WbPose(const WbNode &other);
-  virtual ~WbPose();
+  virtual ~WbPose() override;
 
   // reimplemented functions
   int nodeType() const override { return WB_NODE_POSE; }

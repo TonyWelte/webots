@@ -1,4 +1,4 @@
-# Copyright 1996-2023 Cyberbotics Ltd.
+# Copyright 1996-2024 Cyberbotics Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ class PositionSensor(Sensor):
     @property
     def motor(self):
         from .motor import Motor
-        tag = wb.wb_brake_get_motor(self._tag)
+        tag = wb.wb_position_sensor_get_motor(self._tag)
         return None if tag == 0 else Motor(tag)
 
     @property

@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -527,6 +527,18 @@ void WbSkin::reset(const QString &id) {
   }
 }
 
+void WbSkin::exportNodeFields(WbWriter &writer) const {
+  WbBaseNode::exportNodeFields(writer);
+
+  exportSFResourceField("modelUrl", mModelUrl, writer.relativeMeshesPath(), writer);
+}
+
+QStringList WbSkin::customExportedFields() const {
+  QStringList fields;
+  fields << "modelUrl";
+  return fields;
+}
+
 void WbSkin::updateModel() {
   applyTranslationToWren();
   applyRotationToWren();
@@ -730,7 +742,7 @@ bool WbSkin::createSkeletonFromWebotsNodes() {
   QMap<WrTransform *, WbSolid *> boneToSolidMap;
   int validBoneCount = 0;
   for (int i = 0; i < mBonesField->size(); ++i) {
-    WbSolidReference *ref = dynamic_cast<WbSolidReference *>(mBonesField->item(i));
+    const WbSolidReference *ref = dynamic_cast<WbSolidReference *>(mBonesField->item(i));
     if (ref->solid() == NULL)
       continue;
 

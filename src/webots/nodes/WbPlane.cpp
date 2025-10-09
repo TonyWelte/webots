@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -238,7 +238,7 @@ void WbPlane::updateOdePlanePosition() {
 }
 
 void WbPlane::computePlaneParams(WbVector3 &n, double &d) {
-  WbPose *pose = upperPose();
+  const WbPose *pose = upperPose();
 
   // initial values with identity matrices
   n.setXyz(0.0, 0.0, 1.0);  // plane normal

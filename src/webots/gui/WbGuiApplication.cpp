@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#ifdef _WIN32
+#include <dwmapi.h>
+#include <windows.h>
+#include <QtGui/QWindow>
+#endif
 
 #include "WbGuiApplication.hpp"
 
@@ -490,10 +496,6 @@ void WbGuiApplication::loadInitialWorld() {
 }
 
 #ifdef _WIN32
-#include <Windows.h>
-#include <dwmapi.h>
-#include <QtGui/QWindow>
-
 static bool windowsDarkMode = false;
 
 enum PreferredAppMode { Default, AllowDark, ForceDark, ForceLight, Max };

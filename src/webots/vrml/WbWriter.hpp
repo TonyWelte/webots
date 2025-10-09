@@ -1,4 +1,4 @@
-// Copyright 1996-2023 Cyberbotics Ltd.
+// Copyright 1996-2024 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public:
   void writeFieldStart(const QString &name, bool w3dQuote);
   void writeFieldEnd(bool w3dQuote);
 
-  WbVector3 jointOffset() const { return mJointOffset; }
+  const WbVector3 &jointOffset() const { return mJointOffset; }
   void setJointOffset(const WbVector3 &offset) { mJointOffset = offset; }
 
   // change current indentation
@@ -73,7 +73,7 @@ public:
   void trackDeclaration(const QString &protoName, const QString &protoUrl) {
     mTrackedDeclarations.append(std::pair<QString, QString>(protoName, protoUrl));
   };
-  QList<std::pair<QString, QString>> declarations() const { return mTrackedDeclarations; };
+  const QList<std::pair<QString, QString>> &declarations() const { return mTrackedDeclarations; };
 
   QMap<uint64_t, QString> &indexedFaceSetDefMap() { return mIndexedFaceSetDefMap; }
   WbWriter &operator<<(const QString &s);
@@ -91,6 +91,7 @@ public:
 
   static QString relativeTexturesPath() { return "textures/"; }
   static QString relativeMeshesPath() { return "meshes/"; }
+  static QString relativeSoundsPath() { return "sounds/"; }
 
 private:
   void setType();
